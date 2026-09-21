@@ -1,4 +1,6 @@
-# Verify the documentation package
+# Verify package integrity
+
+Verify that the downloaded documentation matches its published checksums before using it as a reference.
 
 SHA256SUMS.txt lists all tracked package files except itself. Paths are relative to the repository root; hashes refer to exact UTF-8/LF bytes. Preserve line endings when checking a downloaded archive.
 
@@ -25,4 +27,6 @@ if ($failed) { throw 'Package checksum verification failed.' }
 
 Release assets include a documentation ZIP and its separate SHA-256 sidecar. The ZIP contains the same package files as the release commit, without Git history or private build artifacts.
 
-Checksums establish byte integrity only. GitHub-hosted checksums and files share a distribution channel; they are not an independent publisher signature. These checks do not test a FastDiff executable.
+## Verification scope
+
+These checks establish package byte integrity. GitHub-hosted checksums and files share a distribution channel, so publisher authentication requires a separately trusted signature or anchor. Executable testing and result-bundle replay are separate operations; this package contains documentation and synthetic examples.

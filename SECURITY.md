@@ -2,7 +2,7 @@
 
 ## Supported release scope
 
-This repository currently distributes documentation and synthetic examples only. It contains no production executable and makes no supported-binary or security-certification claim.
+This repository distributes the FastDiff V2 system documentation and synthetic examples. Production executable availability, qualification and support scope will be specified with the applicable binary release; see [current release status](RELEASE_NOTES.md). This documentation package carries no executable security certification.
 
 ## Report a vulnerability privately
 

@@ -1,6 +1,6 @@
 # Workflow and synthetic ledger example
 
-A qualified binary package is not included in this repository. The commands below document the Extended CLI contract for a separately obtained compatible executable. They are not an installation instruction for an available release.
+Turn two ledger states into an exact row delta and grouped financial totals, then verify the retained result offline. This walkthrough uses synthetic data to show the Extended comparison contract from input mapping to replay.
 
 1. Prepare immutable local exports or acquire configured sources through Connectors.
 2. Declare selected fields, explicit mappings and the identity key.
@@ -20,11 +20,13 @@ The files in [examples/ledger](../examples/ledger/) contain two synthetic record
 Expected row counts: IDENTICAL=1, CHANGED=1, ONLY_A=0, ONLY_B=0.
 For the synthetic account in USD, A totals 1.75, B totals 1.80, and B-minus-A is 0.05.
 
-These expectations can be inspected directly in the fixture; no release-binary execution is claimed.
+The expected results follow directly from the synthetic fixture.
 
 ## Extended CLI reference
 
-From the repository root, with a compatible executable supplied separately:
+**Availability:** these commands specify the Extended CLI interface for a separately supplied compatible executable. No production binary is currently published in FastDiff-2, and this documentation release does not execute one. See [release status](../RELEASE_NOTES.md).
+
+From the repository root:
 
 ```powershell
 .\fastdiff-extended.exe extended compare --config .\examples\ledger\ledger.json --out .\ledger-run-01

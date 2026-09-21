@@ -1,12 +1,12 @@
 # FastDiff V2
 
-**Deterministic reconciliation of two data states, with local processing and offline replay.**
+**Exact reconciliation for large datasets. Bounded-memory processing. Results you can replay.**
 
-FastDiff compares records by an explicitly defined key and reports what stayed identical, what changed, and what exists on only one side. The extended workflow prepares unsorted inputs using external sorting and disk spill, then produces a result bundle that can be replayed locally.
+FastDiff V2 is a deterministic reconciliation system for comparing two data states by a declared key and selected typed fields. It turns large, unsorted exports into exact `CHANGED`, `ONLY_A` and `ONLY_B` results, with schema differences, fixed-point financial totals and a retained evidence bundle for offline verification.
 
-> **Availability:** this repository is the public-facing documentation and synthetic example package. No production binary is distributed here yet. V2 names the product generation; it does not mean that the executable or configuration version is `2.0.0`. See [release status](RELEASE_NOTES.md).
+External merge sorting and spill-to-disk let the Extended workflow process inputs larger than its configured memory budget. A local, binary-first deployment model keeps sensitive datasets and reconciliation artifacts under the operator's control.
 
-## From inputs to a checkable result
+## One workflow, from source to verified result
 
 ```text
 Declared sources + schema + key
@@ -22,7 +22,20 @@ Declared sources + schema + key
        Offline verification
 ```
 
-Optional network acquisition precedes the extended local comparison. Its limits differ from the external-sort stage.
+| Capability | What it delivers |
+| --- | --- |
+| Exact row reconciliation | Keyed `CHANGED`, `ONLY_A`, `ONLY_B` and `IDENTICAL` results over selected normalized fields |
+| Large, unsorted inputs | Bounded chunks, external merge sorting and disk spill, with an explicit process memory budget |
+| Acquisition and normalization | Configured CSV/JSON sources, optional HTTP GET / read-only GraphQL GET, explicit field mappings and retained snapshots |
+| Schema comparison | Field, type, nullability and key differences between explicitly declared schemas |
+| Financial reconciliation | Exact fixed-point amounts and grouped totals by account, currency or other declared dimensions |
+| CI fast-fail | Full input validation and sorting, then row comparison up to the configured difference limit |
+| Deterministic evidence | Result artifacts, manifests and SHA-256 hashes that bind the retained bundle for integrity checks and replay |
+| Offline verification | Local integrity checking and result reconstruction from retained inputs |
+
+## Precise answers to operational questions
+
+Reconcile inventory snapshots, validate migration exports, compare ledger states or track changes in explicitly mapped blockchain-derived data. Define the entity identity once, select the fields that matter, and obtain an exact delta within that comparison contract.
 
 | Result | Meaning |
 | --- | --- |
@@ -31,48 +44,35 @@ Optional network acquisition precedes the extended local comparison. Its limits 
 | `ONLY_A` | The key exists only in A |
 | `ONLY_B` | The key exists only in B |
 
-Duplicate, empty or null keys are rejected in the extended workflow. FastDiff does not silently collapse duplicate records.
+Extended rejects duplicate, empty and null canonical keys, including collisions introduced by normalization. Row results, schema differences and financial totals remain distinct so each answers its own question.
 
-## Capabilities
+## A focused product architecture
 
-| Component | Scope |
+| Component | Role |
 | --- | --- |
 | Core | Streaming comparison of already sorted files |
-| Connectors | Configured CSV/JSON and optional HTTP GET / read-only GraphQL GET acquisition; normalization and retained snapshots |
-| Extended | CSV, TSV, JSON, JSONL, canonical connector CSV and read-only SQLite exports; external sort and disk spill |
-| Schema comparison | Differences between explicitly declared schemas, including fields, types, nullability and keys |
-| Financial reconciliation | Exact fixed-point amounts and grouped totals without floating-point rounding or FX conversion |
-| CI mode | Validate and sort complete inputs, then stop row comparison at a selected difference limit |
-| Offline verification | Check bundle integrity and reconstruct results from retained inputs |
+| Connectors | Source acquisition, explicit normalization and retained snapshots |
+| Extended | CSV, TSV, JSON, JSONL, canonical connector CSV and read-only SQLite exports; external sort, schema comparison, financial reconciliation and CI |
 
-The product is intended for local binary delivery. The internal implementation is not included in this repository. Existing releases in [FastDiff](https://github.com/cxclrfx/FastDiff) retain their own versions and terms.
+FastDiff is designed for proprietary binary delivery and local operation. Local-file comparison and offline replay keep datasets on the operator's machine; optional acquisition contacts the endpoints the operator configures. See [data handling](PRIVACY.md) for bundle retention and access controls.
 
-## Start here
+## Explore the documentation
 
-- [Workflow and synthetic ledger example](docs/WORKFLOW.md)
-- [Contracts, limits and interpretation](docs/CONTRACT.md)
-- [Release notes and binary availability](RELEASE_NOTES.md)
-- [Security](SECURITY.md) and [privacy](PRIVACY.md)
-- [Repository terms](LICENSE.txt) and [binary licensing status](docs/LICENSING.md)
-- [Verify this package](docs/VERIFY.md)
+- [Documentation guide](docs/README.md) — architecture, workflow and operational contracts
+- [Synthetic ledger walkthrough](docs/WORKFLOW.md) — decimal normalization, a changed row and an exact USD 0.05 total difference
+- [Comparison contract](docs/CONTRACT.md) — identity, resources, CI semantics and verification
+- [Release notes](RELEASE_NOTES.md) — component versions and delivery status
+- [Package verification](docs/VERIFY.md), [security](SECURITY.md) and [licensing](docs/LICENSING.md)
 
-The [ledger fixture](examples/ledger/) is synthetic: one selected row is identical, one changes, and the grouped B-minus-A amount is USD 0.05. These are expected fixture results, not a claim that a production binary has passed release qualification.
+## Scope / Current release status
 
-## Where it fits
+This release provides documentation and synthetic examples. **No production binary is currently published in FastDiff-2.** Binary delivery awaits final executable qualification, approved signing/trust, production licensing and commercial terms. V2 identifies the product generation; component versions are listed in the [release notes](RELEASE_NOTES.md).
 
-Compare inventory snapshots, migration exports, ledger extracts or explicitly mapped blockchain-derived datasets. Both sources must use the same intended entity identity and selected-field semantics.
+- **Formats:** the documented version supports the inputs listed above. Native Parquet/Avro/ORC and PostgreSQL/MySQL adapters are outside this version's scope.
+- **Scale:** external sorting supports data beyond the configured memory budget. The current Windows CLI has a 64–1024 MiB process budget and a ten-minute operation deadline; achievable input size depends on records, I/O and available disk. See [resource limits](docs/CONTRACT.md#large-inputs).
+- **Evidence:** hashes establish byte integrity; offline replay is product verification, not third-party certification. Retain a trusted manifest hash separately from the bundle.
+- **Source consistency:** network pagination is not an atomic snapshot. Use immutable exports when snapshot consistency matters; network acquisition has separate limits.
 
-FastDiff is not a database, interactive dataset viewer, blockchain indexer, wallet-identity classifier or financial audit opinion. Native Parquet/Avro/ORC, PostgreSQL and MySQL adapters are not included in the documented version.
-
-## Correctness boundaries
-
-- Equality is scoped to selected normalized fields and the declared key.
-- Matching SHA-256 values establish byte integrity, not source truth, completeness or business correctness.
-- Offline replay uses the product verifier; it is not independent certification.
-- A self-consistent replacement of an entire bundle requires a separately retained trusted manifest hash to detect.
-- Network pagination does not create an atomic snapshot. Use immutable exports when snapshot consistency matters.
-- Bounded processing does not mean bounded disk usage or a limit on whole-machine RAM.
-
-See [the contract](docs/CONTRACT.md) for the complete operational boundaries.
+The [contract](docs/CONTRACT.md) defines the complete interpretation of results. Earlier releases in [FastDiff](https://github.com/cxclrfx/FastDiff) retain their own versions and terms.
 
 Copyright (c) 2026 cxclrfx. See [LICENSE.txt](LICENSE.txt).

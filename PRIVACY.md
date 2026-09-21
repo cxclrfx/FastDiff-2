@@ -1,10 +1,10 @@
 # Privacy and data handling
 
-FastDiff's documented local workflow processes inputs on the operator's machine. Local-file comparison and offline replay do not require sending datasets to the maintainer.
+FastDiff's local workflow keeps comparison inputs and retained evidence under the operator's control. Local-file comparison and offline replay process data on the operator's machine, without sending datasets to the maintainer.
 
-Optional HTTP/GraphQL acquisition contacts endpoints chosen by the operator and is not an offline operation. Endpoint operators may receive request metadata and authorization supplied for those requests.
+Optional HTTP/GraphQL acquisition is the network stage and contacts endpoints chosen by the operator. Endpoint operators may receive request metadata and authorization supplied for those requests.
 
-The local design does not require telemetry, device fingerprinting or online activation. This describes the documented product design, not a certification of an unreleased executable.
+Local operation is designed to work without telemetry, device fingerprinting or online activation. This page describes the documented architecture; executable release status is tracked in [RELEASE_NOTES.md](RELEASE_NOTES.md).
 
 ## Data retained by a comparison
 

@@ -1,4 +1,6 @@
-# Comparison contract and limits
+# Comparison contract and operational scope
+
+FastDiff produces exact results within an explicit identity, normalization and resource contract. This document defines how to interpret row differences, schema results, financial totals and replay evidence.
 
 ## Identity and normalization
 
@@ -39,3 +41,13 @@ Extended verify checks expected artifacts and reconstructs results from retained
 A checksum is not an attestation of source truth, declaration authority, completeness, atomicity or independent correctness. A completely replaced self-consistent bundle needs an external trusted anchor to detect.
 
 Interrupted runs remain incomplete. Retry in a new output directory; do not promote partial artifacts into successful results.
+
+## Supported integration scope
+
+Extended accepts CSV, TSV, JSON, JSONL, canonical connector CSV and read-only SQLite exports. Native Parquet/Avro/ORC and PostgreSQL/MySQL adapters are outside the documented version. CSV/JSON and optional HTTP GET / read-only GraphQL GET acquisition are provided through configured Connectors paths.
+
+FastDiff reconciles supplied data states. Database service, interactive data browsing, blockchain indexing, wallet-identity classification and financial audit opinions are outside its role. Selected keys and mappings must express the same intended entity and field semantics on both sides.
+
+Network pagination is not an atomic snapshot. Use immutable exports or an upstream snapshot mechanism when source consistency matters.
+
+Offline replay uses the product verifier and is not independent or third-party certification. Hash equality establishes byte integrity, rather than source truth or business correctness. Financial reconciliation performs no FX conversion. The memory ceiling applies to process private committed memory, while disk requirements and whole-machine memory remain separate resource concerns.
