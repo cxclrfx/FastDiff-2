@@ -1,0 +1,19 @@
+FASTDIFF V2 REPOSITORY NOTICE
+
+Copyright (c) 2026 cxclrfx. All rights reserved.
+
+This repository contains FastDiff product documentation and synthetic examples.
+It does not grant a license to the private FastDiff implementation or to any
+commercial executable. No open-source software license is granted by this
+repository notice.
+
+Public access to this repository does not grant permission to redistribute,
+resell or sublicense proprietary FastDiff software. Any binary license must
+be supplied separately with the applicable release or written agreement.
+Rights required by applicable law and the platform's terms remain unaffected.
+
+The documentation and examples are provided AS IS, without a warranty of
+fitness for any particular purpose, to the extent permitted by applicable law.
+
+Earlier, separately distributed FastDiff materials retain their own terms.
+See docs/LICENSING.md for the status of future binary licensing.

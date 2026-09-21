@@ -1,0 +1,12 @@
+# Local runs and separately supplied binaries
+*.exe
+*.dll
+*.pdb
+*.key
+*.pem
+.env
+.env.*
+*-run-*/
+*-ci-*/
+work/
+private-release-evidence/
